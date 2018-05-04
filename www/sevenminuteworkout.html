@@ -1,0 +1,164 @@
+<html>
+  <head>
+  <meta charset='utf-8'>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+    }
+    .row {
+      width: 100%;
+      box-sizing: border-box;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-flex: 0;
+      -ms-flex: 0 1 auto;
+      flex: 0 1 auto;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      margin-right: -.5rem;
+      margin-left: -.5rem;
+    }
+    .control-btn {
+      font-size: 5em;
+      width: 33.333333333333%;
+    }
+    .countdown {
+      font-size: 10em;
+      width: 33.333333333333%;
+      margin-left: 33.333333333333%;
+      margin-right: 33.333333333333%;
+      line-height: 1.5em;
+    }
+    #pictureText {
+      padding-top:50px;
+      font-size: 5em;
+      width:100%;
+    }
+  </style>
+  </head>
+  <body>
+    <div class="row" style="height:70%;">
+      <div id="pictureText">Click ⏯️ to Start</div>
+      <div id="picture" style="padding-top:50px;height:100%;width:100%;""></div>
+    </div>
+    <div class="row" style="height:15%;">
+      <div class="countdown" id="countdown">--</div>
+    </div>
+    <div class="row" style="height:15%;" id="controls">
+      <button class="control-btn" id="back">⏪</button>
+      <button class="control-btn" id="play">⏯️</button>
+      <button class="control-btn" id="skip">⏩</button>
+    </div>
+    <script>
+      let timer = null
+      let pause = true
+      let timeLeft = 0
+      let num = 0
+      const time = 31
+      const restTime = 10
+      const eList = [
+        {name:"Jumping Jacks", image:"https://vignette.wikia.nocookie.net/bodybuilding/images/5/58/Jumping_Jack.gif/revision/latest?cb=20090711225646"},
+        {name:"Wall Sits", image:"data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzIwMCcgd2lkdGg9JzIwMCcgIGZpbGw9IiMwMDAwMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZlcnNpb249IjEuMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxMDAgMTAwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cGF0aCBkPSJNNzMuNjg2LDUuMlY5NWgtOC45MTdWMjYuNzk3Yy0xLjYyNiwxLjc2NS0zLjk5NCwyLjg4LTYuNTk1LDIuODhjLTQuOTY5LDAtOS4wMS00LjAxNy05LjAxLTguOTg3czQuMDQxLTkuMDEsOS4wMS05LjAxICBjMi42MDEsMCw0Ljk3LDEuMTE1LDYuNTk1LDIuOTAzVjUuMkg3My42ODZ6Ij48L3BhdGg+PHBhdGggZD0iTTMyLjcyMiw2NC44MzVjLTAuMTYzLTAuMDQ2LTAuMzI1LTAuMDQ2LTAuNTExLTAuMDQ2aDAuNDY0QzMyLjY3Niw2NC43ODgsMzIuNjk5LDY0LjgzNSwzMi43MjIsNjQuODM1eiI+PC9wYXRoPjxwYXRoIGQ9Ik02Mi4yMzgsMzEuNjczYy0xLjA0NS0wLjc0My0yLjQ4NS0xLjIwNy00LjA2NC0xLjIwN2MtMy4xNTgsMC01LjczNiwxLjgzNC01LjczNiw0LjEzM3Y0LjExTDMyLjAyNiw1OS4xNDUgIGMtMC42NzQsMC42NS0wLjk5OSwxLjUwOS0wLjk5OSwyLjQxNWMwLDEuMDIyLDAuNDE4LDIuMDY3LDEuMjU0LDIuOTAzYzAuMTE2LDAuMTE2LDAuMjU1LDAuMjMyLDAuMzk1LDAuMzI1ICBjMCwwLDAuMDIzLDAuMDQ2LDAuMDQ2LDAuMDQ2Yy0wLjE2My0wLjA0Ni0wLjMyNS0wLjA0Ni0wLjUxMS0wLjA0NmMtMC4yNzksMC0wLjUzNCwwLjAyMy0wLjc4OSwwLjA3ICBjLTEuODExLDAuMjU1LTMuMTU4LDEuNDYzLTMuMTU4LDIuODh2MjQuMjljMCwxLjYyNSwxLjc2NSwyLjk3MiwzLjk0OCwyLjk3MmMyLjE4MywwLDMuOTQ4LTEuMzQ3LDMuOTQ4LTIuOTcyVjcyLjY2aDIyLjA4NCAgbDAuNjUtMC4wN2MyLjgzMy0wLjIzMiw1LjAxNi0xLjk3NCw1LjAxNi00LjA2NFYzNC41OTlDNjMuOTEsMzMuNDM4LDYzLjI1OSwzMi40MTYsNjIuMjM4LDMxLjY3M3ogTTUyLjQzOCw2NC43ODhIMzcuNTA2ICBjMC4wNDYtMC4wMjMsMC4wNy0wLjA0NiwwLjA5My0wLjA3bDE0LjgzOS0xNC44NjJWNjQuNzg4eiI+PC9wYXRoPjwvc3ZnPg=="},
+        {name:"Pushups", image:"https://thumbs.gfycat.com/GlossySkinnyDuckbillcat-max-1mb.gif"},
+        {name:"Crunches", image:"https://i.imgur.com/UJAnRhJ.gif"},
+        {name:"Step Ups", image:"https://www.cdn.spotebi.com/wp-content/uploads/2016/10/step-up-harvard-test-spotebi.gif"},
+        {name:"Squats", image:"https://www.cdn.spotebi.com/wp-content/uploads/2014/10/squat-exercise-illustration.gif"},
+        {name:"Dips", image:"https://www.cdn.spotebi.com/wp-content/uploads/2015/04/tricep-dips-exercise-illustration-spotebi.gif"},
+        {name:"Plank", image:"data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzIwMCcgd2lkdGg9JzIwMCcgIGZpbGw9IiMwMDAwMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZlcnNpb249IjEuMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA2MTIgNjEyIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA2MTIgNjEyIiB4bWw6c3BhY2U9InByZXNlcnZlIj48Zz48Zz48cGF0aCBkPSJNNDkzLjIsMzg2LjFoLTU5LjNjLTEuMywwLTIuMy0xLTIuMy0yLjNzMS0yLjMsMi4zLTIuM2g1OS4zYzEuMywwLDIuMywxLDIuMywyLjNTNDk0LjQsMzg2LjEsNDkzLjIsMzg2LjEgICAgeiI+PC9wYXRoPjwvZz48Zz48cGF0aCBkPSJNMjUzLjgsMzg2LjFoLTEzNWMtMS4zLDAtMi4zLTEtMi4zLTIuM3MxLTIuMywyLjMtMi4zaDEzNWMxLjMsMCwyLjMsMSwyLjMsMi4zUzI1NS4xLDM4Ni4xLDI1My44LDM4Ni4xeiI+PC9wYXRoPjwvZz48Zz48cGF0aCBkPSJNMTY4LjYsMjkyLjJjLTEuMS0wLjQtMTAuNC0zLjUtMTUuNiwwLjFjLTEuNSwxLjEtMy4yLDMuMS0zLjEsN2MwLDIuOS0wLjYsMy42LTAuNywzLjcgICAgYy0wLjYsMC41LTIuOC0wLjEtNC4zLTAuNWMtMi43LTAuNy01LjgtMS41LTguMywwLjFjLTEuNSwwLjktMi42LDIuNS0zLjEsNC44Yy0wLjMsMS4yLDAuNSwyLjQsMS43LDIuN2MwLjIsMCwwLjMsMC4xLDAuNSwwLjEgICAgYzEsMCwyLTAuNywyLjItMS44YzAuMi0wLjcsMC41LTEuNiwxLTEuOWMwLjktMC42LDMsMCw0LjksMC40YzIuOCwwLjcsNS45LDEuNSw4LjMtMC40YzEuNy0xLjQsMi41LTMuNywyLjUtNy4zICAgIGMwLTIuMSwwLjctMi44LDEuMi0zLjJjMi40LTEuNyw4LjMtMC42LDExLjQsMC41YzEuMiwwLjQsMi41LTAuMiwyLjktMS40QzE3MC40LDI5My45LDE2OS44LDI5Mi42LDE2OC42LDI5Mi4yeiI+PC9wYXRoPjxwYXRoIGQ9Ik00ODcuMywzNTEuNmMtMC4yLTQuMS0wLjEtNy41LDAtMTAuM2MwLjItOC40LDAuMy0xNC05LjQtMTUuMWMtNy40LTAuOS0xMS44LDAtMTQuMSwwLjggICAgYy0wLjEsMC0wLjMtMC4xLTAuNS0wLjFjLTQuMS0wLjQtOC4xLTAuOC0xMS45LTEuMmMtMjIuNy0yLjMtNDAuNi00LjEtNTQtMC43Yy00LjMsMS4xLTYuNywwLjItMTEuMS0xLjQgICAgYy01LTEuOC0xMS44LTQuMy0yNS4yLTUuM2MwLDAsMC0wLjEsMC0wLjFjMC4zLTEuMi0wLjQtMi4zLTEuNS0yLjdjLTUtMS41LTkuNy0zLjYtMTQuMi01LjdjLTE0LjQtNi41LTI5LjMtMTMuMS01NC4xLTEuOCAgICBjLTEyLDAuOS0zMS42LTUuNy00MC04LjVjLTItMC43LTMuNC0xLjEtNC4zLTEuNGMtOC0yLjItMTMuNS00LjctMTcuOC02LjdjLTEwLjMtNC42LTE1LjktNy4yLTM1LjQsMS44Yy0wLjksMC40LTEuNywxLTIuNSwxLjYgICAgYy0wLjIsMC0wLjQtMC4xLTAuNi0wLjFjLTcuNCwwLjQtMTIuNS0zLjItMTguNS03LjRjLTQuOC0zLjQtOS44LTYuOS0xNi42LTguNWMtMjIuMS01LjItMjkuNSw5LjEtMzEuOSwxOC4xICAgIGMtMiw3LjUtMS4zLDE1LjQsMiwyMS43YzAuMywwLjYsMS4yLDIuMywzLjEsMi4yYzEuOS0wLjEsMi41LTEuOSwzLTMuM2MwLjEtMC4zLDAuMy0wLjgsMC41LTEuMmMwLDAsMC4xLDAuMSwwLjEsMC4xICAgIGMzLjUsMy4zLDYuNCw0LjMsOSw1LjFjMi45LDAuOSw0LjksMS42LDcuNyw1LjZjMS42LDIuMyw0LjEsMC43LDUuMSwwLjFjMC41LTAuMywxLjUtMC45LDEuOS0wLjljMC4yLDAuMSwwLjYsMC4zLDEsMC42ICAgIGMwLjksMC42LDIsMS4zLDMuMywxLjdjMSwwLjMsMS45LDAuNSwyLjcsMC42YzAuOCwwLjEsMS40LDAuMiwyLDAuNGMxLDAuNCwyLDAuNiwyLjksMC42YzAuOSwwLDEuNy0wLjIsMi41LTAuNSAgICBjMy4zLTEuNSw0LjYtNS40LDUuNy04LjVjMC4zLTEsMC43LTEuOSwwLjktMi40YzAuNS0wLjksNC0wLjUsNy40LDAuNmMxLjEsNi45LDQuNywxNi45LDE2LjUsMjIuM2MwLjUsMS4xLDAuOSwyLjIsMS40LDMuMiAgICBjMS4yLDIuNywyLjQsNS41LDQuMSwxMC44YzEuMSwzLjQsMi42LDUuOSw0LjIsNy44Yy04LjQtMC41LTE4LjMsMi44LTI3LjEsNS44Yy02LjQsMi4xLTEzLjcsNC42LTE1LjksMy41ICAgIGMtMTIuMS01LjYtMjkuMywwLjQtMzIuNiw1LjdjLTEuMiwxLjktMC45LDQsMC44LDUuNGMyLjEsMS43LDE0LjEsMiwyMi40LDJjNC41LDAsNy45LTAuMSw4LTAuMWMyLjQtMC4xLDguMS0wLjIsMTQuNy0wLjMgICAgYzEyLjQtMC4yLDI3LjgtMC40LDMzLjktMC45YzEuMS0wLjEsMi43LTAuMSw0LjUsMGM3LDAuMSwxNSwwLjIsMTUuMS01LjJjMC0wLjQsMC0xLDAuMS0yYzAuOC0xMy44LDAuNC0yNS45LTEtMzYuMSAgICBjMS40LDAuMiwzLDAuNCw0LjcsMC42YzUuNCwwLjcsMTIsMS43LDE2LjYsMS44YzEuOSwwLjEsNC42LDAuOCw3LjIsMS42YzIuNywwLjgsNS4yLDEuNSw3LjMsMS42YzQuMiwwLjEsOC42LDAuOCwxMC40LDEuMSAgICBjNS41LDcuMSwxMC43LDkuMSwxNi43LDExLjRjMi40LDAuOSw0LjgsMS44LDcuNiwzLjJjMTMuOSw2LjcsMjIuNCw3LjEsMjkuOSw3LjVsMS4zLDAuMWMwLjQsMCwwLjksMCwxLjMsMCAgICBjOC4yLDAsMjIuOC0zLjEsMjMuNS0zLjNjMC42LTAuMSwxLjEtMC41LDEuNC0xYzAuMy0wLjUsMC40LTEuMSwwLjMtMS43YzAtMC4xLTAuNi0yLjktMS4zLTcuNGM2LjYtMC4yLDExLjYtMS4zLDE2LjQtMi41ICAgIGM0LjktMS4yLDkuNS0yLjEsMTUuOC0yLjRjMC41LDAsMS4xLDAuMSwyLjksMC41YzIuNiwwLjYsNy4zLDEuNywxNywzLjRjMTEuMSwxLjksMjAuMS0yLjMsMjcuMy01LjhjNS45LTIuOCwxMC42LTUsMTQuNC0zLjIgICAgYzEuNiwyLDkuNSwxMS44LDExLjgsMTkuN2MxLjIsNC4xLTEuNSw3LjEtNC42LDEwLjJjLTEuNywxLjctMy4xLDMtMi42LDQuOGMwLjEsMC42LDAuNiwxLjcsMi4zLDIuMmMyLjYsMC44LDUsMS4xLDcuMywxLjEgICAgYzMuOCwwLDcuMS0xLjEsOS45LTMuM0M0ODcuMSwzNzUuMSw0ODcuNywzNjAsNDg3LjMsMzUxLjZ6IE0xNzMuMiwzMTYuOGMtMC40LDAuOC0wLjgsMS45LTEuMiwzLjFjLTAuNywyLjEtMS44LDUuMi0zLjMsNS45ICAgIGMtMC4yLDAuMS0wLjcsMC4zLTEuOS0wLjJjLTEtMC40LTIuMS0wLjYtMy0wLjdjLTAuNy0wLjEtMS40LTAuMi0xLjktMC40Yy0wLjgtMC4zLTEuNi0wLjgtMi40LTEuMmMtMC41LTAuMy0xLTAuNi0xLjUtMC44ICAgIGMtMi40LTEuMS00LjcsMC4yLTYuMSwxLjFjLTMuMi00LjItNi4yLTUuMS05LjEtNi4xYy0yLjMtMC44LTQuNS0xLjUtNy4zLTQuMWMtMS41LTEuNC0zLTEuOS00LjQtMS42Yy0xLjIsMC4zLTIsMS4yLTIuNiwyLjEgICAgYy0xLjctNC44LTEuOS0xMC4zLTAuNC0xNS42YzMuNi0xMy4yLDEyLjUtMTguMiwyNi41LTE0LjljNS45LDEuNCwxMC41LDQuNiwxNSw3LjhjNS4zLDMuNywxMC44LDcuNiwxOC4xLDguMiAgICBjLTIuMyw0LjEtMy43LDkuNi0zLjYsMTUuM0MxODAuNiwzMTMuNywxNzUuMiwzMTMsMTczLjIsMzE2Ljh6IE0yNjMuNCwzNDEuMmMtMi45LTAuOC01LjgtMS42LTguMy0xLjdjLTQuNC0wLjEtMTAuOS0xLTE2LjEtMS44ICAgIGMtMi43LTAuNC00LjYtMC42LTYtMC44Yy0yLjMtMTIuNy02LjYtMjIuMy0xMi43LTI4LjVjLTAuOS0wLjktMi4zLTAuOS0zLjIsMGMtMC45LDAuOS0wLjksMi4zLDAsMy4yICAgIGM3LjIsNy41LDE1LjQsMjQuOSwxMy4yLDY1LjljMCwwLjktMC4xLDEuNS0wLjEsMS45Yy0xLjMsMS03LjcsMC45LTEwLjUsMC45Yy0xLjksMC0zLjYsMC00LjksMC4xYy02LDAuNS0yMS4zLDAuNy0zMy42LDAuOSAgICBjLTYuNiwwLjEtMTIuNCwwLjItMTQuOCwwLjNjLTguNCwwLjMtMjIuOS0wLjEtMjYuOS0wLjhjMC43LTAuNywyLjEtMS43LDQuNi0yLjhjNi4xLTIuNiwxNS4zLTMuOCwyMS45LTAuOCAgICBjMy45LDEuOCwxMC43LTAuNSwxOS4zLTMuM2M4LjUtMi45LDE4LjItNi4xLDI1LjgtNS41YzEuOCwwLjEsMy4xLDAuMyw0LDAuNGMyLDAuMiwzLjYsMC40LDQuMy0xLjRjMC43LTEuNy0wLjgtMi43LTEuNC0zLjIgICAgYy0xLjUtMS4xLTUtMy42LTYuOC05LjRjLTEuOC01LjUtMy04LjQtNC4zLTExLjJjLTEuNy0zLjgtMy4yLTcuNC01LjktMTcuNWMtMC4zLTEuMi0xLjUtMS45LTIuOC0xLjZjLTEuMiwwLjMtMS45LDEuNS0xLjYsMi44ICAgIGMwLjksMy41LDEuNyw2LjIsMi40LDguNGMtOC44LTYuMy0xMC0xNi4xLTEwLjEtMjAuNWMtMC4xLTguOSwzLjQtMTUuOCw2LjktMTcuNWMxNy42LTguMSwyMS43LTYuMywzMS43LTEuOCAgICBjNC41LDIsMTAuMiw0LjYsMTguNSw2LjljMC44LDAuMiwyLjIsMC43LDQsMS4zYzksMywyNy40LDkuMSw0MC4zLDguOGMxLjQsOC4yLTYuMSwyMy44LTEwLjEsMzAuOWMtMi4yLTAuMy02LjMtMC45LTEwLjMtMSAgICBDMjY4LjEsMzQyLjUsMjY1LjcsMzQxLjgsMjYzLjQsMzQxLjJ6IE0zMzUuNiwzNjUuN2wtMS4zLTAuMWMtNy40LTAuNC0xNS4xLTAuNy0yOC4xLTdjLTMtMS40LTUuNi0yLjQtOC0zLjMgICAgYy01LjYtMi4xLTkuOC0zLjctMTQuMy05LjRjMy4xLTUuNCwxMi43LTIzLjUsMTAuNi0zNC4zYzIyLjItOS42LDM1LjItMy44LDQ5LDIuNGM0LjEsMS44LDguMywzLjcsMTIuNyw1LjIgICAgYy0zLjUsMTcuMy0wLjQsMzcuMiwwLjgsNDMuOEMzNTIuNCwzNjQsMzQxLjIsMzY2LDMzNS42LDM2NS43eiBNNDM4LjIsMzQ2LjJjLTcsMy4zLTE0LjksNy4xLTI0LjYsNS40ICAgIGMtOS42LTEuNy0xNC4zLTIuOC0xNi44LTMuNGMtMi4xLTAuNS0zLTAuNy00LjEtMC43Yy02LjgsMC4yLTExLjksMS41LTE2LjgsMi43Yy00LjksMS4yLTkuNSwyLjMtMTUuOSwyLjUgICAgYy0wLjktOC4yLTEuNi0xOS41LDAuMS0yOS45YzEzLjEsMC45LDE5LjcsMy4zLDI0LjUsNS4xYzQuNywxLjcsOC4xLDIuOSwxMy43LDEuNWMxMi42LTMuMSwzMC4yLTEuNCw1Mi40LDAuOSAgICBjMy4yLDAuMyw2LjQsMC42LDkuNywxYy0wLjcsNi4xLTMuMywxMC4zLTQuNiwxMS41QzQ1MC41LDM0MC40LDQ0NC41LDM0My4yLDQzOC4yLDM0Ni4yeiBNNDc1LjgsMzc4LjJjLTIuNywyLjEtNi40LDIuOC0xMC44LDEuOSAgICBjMi44LTIuNyw3LjgtNy43LDUuNy0xNC43Yy0yLjItNy40LTguMy0xNS44LTExLjMtMTkuNmMyLjQtMi40LDUuMi03LjgsNS44LTE0LjVjMS42LTAuNiw1LjMtMS40LDEyLjItMC42ICAgIGM1LjQsMC42LDUuNiwxLjYsNS40LDEwLjVjLTAuMSwyLjktMC4yLDYuNCwwLDEwLjZDNDgzLjQsMzY0LjYsNDgwLjgsMzc0LjIsNDc1LjgsMzc4LjJ6Ij48L3BhdGg+PC9nPjwvZz48L3N2Zz4="},
+        {name:"High Steps", image:"https://www.cdn.spotebi.com/wp-content/uploads/2014/10/high-knees-exercise-illustration.gif"},
+        {name:"Lunges", image:"https://www.cdn.spotebi.com/wp-content/uploads/2016/09/front-and-back-lunges-exercise-illustration-spotebi.gif"},
+        {name:"Pushup and Rotation", image:"https://media4.popsugar-assets.com/files/thumbor/BaWEAcCjtJEjiwf3PqJHnZ_S23A/fit-in/2048xorig/filters:format_auto-!!-:strip_icc-!!-/2016/08/10/766/n/1922729/1eae2dcf3d395379_PushUpTwist.gif"},
+        {name:"Left Side Plank", image:"https://www.fitwirr.com/media/2016/11/30/side-plank.jpg"},
+        {name:"Right Side Plank", image:"https://www.fitwirr.com/media/2016/11/30/side-plank.jpg"}
+      ]
+      setNum(0)
+      play.addEventListener('click',()=>{
+        pause = !pause
+      })
+      skip.addEventListener('click',()=>{
+        setNum(num+1)
+      })
+      back.addEventListener('click',()=>{
+        setNum(num-1)
+      })
+      function countDown() {
+        clearTimeout(timer)
+        if(pause){
+          timer = setTimeout(()=>{countDown()},1000)
+        } else {
+          if (timeLeft == (time + restTime)) setNum(num+1)
+          else if(timeLeft <= restTime) {
+            picture.style.background = `url(${eList[num].image}) no-repeat`
+            picture.style.backgroundSize = 'contain'
+            const text = `The Next Excersise is: ${eList[num].name}`
+            pictureText.textContent = text
+            
+            // Speech
+            if(timeLeft == 0) {
+              const msg = new SpeechSynthesisUtterance(text)
+              window.speechSynthesis.speak(msg)
+            }
+            else if ((restTime - timeLeft) == 3) {
+              const msg = new SpeechSynthesisUtterance('3')
+              window.speechSynthesis.speak(msg)
+            }
+            else if ((restTime - timeLeft) == 2) {
+              const msg = new SpeechSynthesisUtterance('2')
+              window.speechSynthesis.speak(msg)
+            }
+            else if ((restTime - timeLeft) == 1) {
+              const msg = new SpeechSynthesisUtterance('1')
+              window.speechSynthesis.speak(msg)
+            }
+            else if ((restTime - timeLeft) == 0) {
+              const msg = new SpeechSynthesisUtterance('GO!')
+              window.speechSynthesis.speak(msg)
+            }
+            
+            countdown.textContent = `${restTime - timeLeft}`
+            timeLeft++
+            timer = setTimeout(()=>{countDown()},1000)
+          }
+          else {
+            
+            // Speech
+            if(((time + restTime) - timeLeft) == Math.floor(time/2)) {
+              const msg = new SpeechSynthesisUtterance("Half way done")
+              window.speechSynthesis.speak(msg)
+            }
+            else if (((time + restTime) - timeLeft) == 3) {
+              const msg = new SpeechSynthesisUtterance('3')
+              window.speechSynthesis.speak(msg)
+            }
+            else if (((time + restTime) - timeLeft) == 2) {
+              const msg = new SpeechSynthesisUtterance('2')
+              window.speechSynthesis.speak(msg)
+            }
+            else if (((time + restTime) - timeLeft) == 1) {
+              const msg = new SpeechSynthesisUtterance('1')
+              window.speechSynthesis.speak(msg)
+            }
+            
+            pictureText.textContent = `${eList[num].name}`
+            countdown.textContent = `${(time + restTime) - timeLeft}`
+            timeLeft++
+            timer = setTimeout(()=>{countDown()},1000)
+          } 
+        }
+      }
+      function setNum(n) {
+        num = n
+        if(num < 0) num = 0
+        if(num > eList.length - 1) num = eList.length - 1
+        timeLeft = 0
+        countDown()
+      }
+    </script>
+  </body>
+</html>

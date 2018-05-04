@@ -15,6 +15,11 @@ handlers:
   upload: www/index.html
   secure: always
 
+- url: /sevenminuteworkout
+  static_files: www/sevenminuteworkout.html
+  upload: www/sevenminuteworkout.html
+  secure: always
+
 - url: /(.*)
   static_files: www/\1
   upload: www/(.*)
