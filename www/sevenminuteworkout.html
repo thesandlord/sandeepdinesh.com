@@ -60,6 +60,7 @@
       let pause = true
       let timeLeft = 0
       let num = 0
+      const synth = window.speechSynthesis
       const time = 31
       const restTime = 10
       const eList = [
@@ -79,12 +80,15 @@
       ]
       setNum(0)
       play.addEventListener('click',()=>{
+        synth.cancel()
         pause = !pause
       })
       skip.addEventListener('click',()=>{
+        synth.cancel()
         setNum(num+1)
       })
       back.addEventListener('click',()=>{
+        synth.cancel()
         setNum(num-1)
       })
       function countDown() {
@@ -96,29 +100,29 @@
           else if(timeLeft <= restTime) {
             picture.style.background = `url(${eList[num].image}) no-repeat`
             picture.style.backgroundSize = 'contain'
-            const text = `The Next Excersise is: ${eList[num].name}`
+            const text = `The next exercise is: ${eList[num].name}`
             pictureText.textContent = text
             
             // Speech
             if(timeLeft == 0) {
               const msg = new SpeechSynthesisUtterance(text)
-              window.speechSynthesis.speak(msg)
+              synth.speak(msg)
             }
             else if ((restTime - timeLeft) == 3) {
               const msg = new SpeechSynthesisUtterance('3')
-              window.speechSynthesis.speak(msg)
+              synth.speak(msg)
             }
             else if ((restTime - timeLeft) == 2) {
               const msg = new SpeechSynthesisUtterance('2')
-              window.speechSynthesis.speak(msg)
+              synth.speak(msg)
             }
             else if ((restTime - timeLeft) == 1) {
               const msg = new SpeechSynthesisUtterance('1')
-              window.speechSynthesis.speak(msg)
+              synth.speak(msg)
             }
             else if ((restTime - timeLeft) == 0) {
               const msg = new SpeechSynthesisUtterance('GO!')
-              window.speechSynthesis.speak(msg)
+              synth.speak(msg)
             }
             
             countdown.textContent = `${restTime - timeLeft}`
@@ -130,19 +134,19 @@
             // Speech
             if(((time + restTime) - timeLeft) == Math.floor(time/2)) {
               const msg = new SpeechSynthesisUtterance("Half way done")
-              window.speechSynthesis.speak(msg)
+              synth.speak(msg)
             }
             else if (((time + restTime) - timeLeft) == 3) {
               const msg = new SpeechSynthesisUtterance('3')
-              window.speechSynthesis.speak(msg)
+              synth.speak(msg)
             }
             else if (((time + restTime) - timeLeft) == 2) {
               const msg = new SpeechSynthesisUtterance('2')
-              window.speechSynthesis.speak(msg)
+              synth.speak(msg)
             }
             else if (((time + restTime) - timeLeft) == 1) {
               const msg = new SpeechSynthesisUtterance('1')
-              window.speechSynthesis.speak(msg)
+              synth.speak(msg)
             }
             
             pictureText.textContent = `${eList[num].name}`
@@ -152,10 +156,22 @@
           } 
         }
       }
+      function finish() {
+        const text = "Good Job! You are done!"
+        pictureText.textContent = text
+        picture.style.background = 'white'
+        const msg = new SpeechSynthesisUtterance(text)
+        synth.speak(msg)
+        pause = true
+        num = 0
+      }
       function setNum(n) {
         num = n
         if(num < 0) num = 0
-        if(num > eList.length - 1) num = eList.length - 1
+        if(num > eList.length - 1) {
+          finish()
+          return
+        }
         timeLeft = 0
         countDown()
       }
