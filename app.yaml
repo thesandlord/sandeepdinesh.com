@@ -1,7 +1,0 @@
-runtime: nodejs8
-
-handlers:
-- url: /.*
-  secure: always
-  redirect_http_response_code: 307
-  script: auto

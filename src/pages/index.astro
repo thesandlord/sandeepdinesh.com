@@ -1,0 +1,163 @@
+---
+import ProjectCard from '../components/ProjectCard.astro';
+import SocialLink from '../components/SocialLink.astro';
+import { aboutText, content } from '../data/content';
+import Layout from '../layouts/Layout.astro';
+
+const sections = [
+  { key: 'Projects', data: content.Projects, icon: '⚡' },
+  { key: 'Talks', data: content.Talks, icon: '🎤' },
+  { key: 'Posts', data: content.Posts, icon: '📝' },
+  { key: 'Videos', data: content.Videos, icon: '🎬' },
+];
+---
+
+<Layout title="Sandeep Dinesh">
+  <!-- Animated background -->
+  <div class="fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-cyber-darker via-cyber-dark to-cyber-darker"></div>
+    <div class="absolute inset-0 opacity-30">
+      <div class="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-cyber-purple/20 blur-[128px]"></div>
+      <div class="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-cyber-accent/10 blur-[128px]"></div>
+    </div>
+    <!-- Grid pattern -->
+    <div class="absolute inset-0 bg-[linear-gradient(rgba(0,255,204,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,204,0.03)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex flex-col">
+
+    <div class="flex-1 flex flex-col items-center justify-center px-4 text-center">
+      <div class="animate-fade-in">
+        <!-- Glowing accent -->
+        <div class="mb-6 inline-block rounded-full border border-cyber-accent/30 bg-cyber-accent/5 px-4 py-2 text-sm text-cyber-accent backdrop-blur-sm">
+          Full-Stack Developer & Cloud Advocate
+        </div>
+        
+        <h1 class="font-display text-5xl font-bold tracking-tight text-white sm:text-7xl md:text-8xl">
+          <span class="block">SANDEEP DINESH</span>
+        </h1>
+        
+        <p class="mt-6 max-w-2xl text-lg text-gray-400 sm:text-xl">
+          Google Cloud, Kubernetes, Serverless, Microservices, Node.js, and more
+        </p>
+
+        <!-- Social links -->
+        <div class="mt-10 flex items-center justify-center gap-4">
+          <SocialLink href="https://github.com/thesandlord" label="GitHub">
+            <svg class="h-5 w-5 text-white transition-colors group-hover:text-cyber-accent" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </SocialLink>
+          
+          <SocialLink href="https://twitter.com/sandeepdinesh" label="Twitter">
+            <svg class="h-5 w-5 text-white transition-colors group-hover:text-cyber-accent" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </SocialLink>
+          
+          <SocialLink href="https://medium.com/@SandeepDinesh" label="Medium">
+            <svg class="h-5 w-5 text-white transition-colors group-hover:text-cyber-accent" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+            </svg>
+          </SocialLink>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="relative border-t border-white/10 bg-cyber-dark/80 backdrop-blur-lg">
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-2 px-4 py-4 sm:gap-8">
+        {sections.map(({ key, icon }) => (
+          <a 
+            href={`#${key}`}
+            class="group flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-400 transition-all hover:bg-white/5 hover:text-cyber-accent sm:text-base"
+          >
+            <span>{icon}</span>
+            <span class="font-display">{key}</span>
+          </a>
+        ))}
+      </div>
+    </nav>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-24 left-1/2 -translate-x-1/2 animate-bounce">
+      <a href="#about" class="text-white/50 transition-colors hover:text-cyber-accent">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="relative py-24">
+    <div class="mx-auto max-w-4xl px-4">
+      <div class="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-8 backdrop-blur-sm md:p-12">
+        <div class="flex items-center gap-3 mb-8">
+          <div class="h-px flex-1 bg-gradient-to-r from-transparent to-cyber-accent/50"></div>
+          <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">About</h2>
+          <div class="h-px flex-1 bg-gradient-to-l from-transparent to-cyber-accent/50"></div>
+        </div>
+        <p class="text-lg leading-relaxed text-gray-300">
+          {aboutText}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Sections -->
+  {sections.map(({ key, data, icon }) => (
+    <section id={key} class="relative py-16 sm:py-24">
+      <div class="mx-auto max-w-6xl px-4">
+        <div class="mb-12 flex items-center gap-4">
+          <span class="text-3xl">{icon}</span>
+          <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">{key}</h2>
+          <div class="h-px flex-1 bg-gradient-to-r from-cyber-accent/50 to-transparent"></div>
+        </div>
+        
+        <div class="grid gap-6">
+          {data.map((item, index) => (
+            <ProjectCard
+              title={item.Title}
+              description={item.Description}
+              image={item.Image}
+              link={item.Link}
+              delay={index * 100}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10 bg-cyber-darker/50 py-12 backdrop-blur-sm">
+    <div class="mx-auto max-w-6xl px-4 text-center">
+      <p class="text-gray-500">
+        © {new Date().getFullYear()} Sandeep Dinesh. Built with 
+        <span class="text-cyber-accent">Astro</span> + 
+        <span class="text-cyber-purple">Tailwind</span>, hosted on 
+        <span class="text-cyber-pink">Firebase</span>
+      </p>
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 1s ease-out;
+  }
+</style>
+

@@ -1,0 +1,70 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  image: string;
+  link: string;
+  delay?: number;
+}
+
+const { title, description, image, link, delay = 0 } = Astro.props;
+---
+
+<a 
+  href={link}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="project-card group block opacity-0"
+  style={`animation-delay: ${delay}ms`}
+>
+  <div class="relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm transition-all duration-500 hover:border-cyber-accent/50 hover:shadow-lg hover:shadow-cyber-accent/10">
+    <div class="absolute inset-0 bg-gradient-to-r from-cyber-accent/5 to-cyber-purple/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+    
+    <div class="flex flex-col md:flex-row">
+      <div class="relative flex-shrink-0 overflow-hidden md:w-48">
+        <div class="aspect-video md:aspect-square w-full">
+          <img 
+            src={image} 
+            alt={title}
+            class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+            loading="lazy"
+          />
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent to-cyber-dark/80 md:block hidden"></div>
+      </div>
+      
+      <div class="flex flex-1 flex-col justify-center p-5 md:p-6">
+        <h4 class="font-display text-lg font-semibold text-white transition-colors duration-300 group-hover:text-cyber-accent md:text-xl">
+          {title}
+        </h4>
+        <p class="mt-2 text-sm leading-relaxed text-gray-400 line-clamp-3">
+          {description}
+        </p>
+        <div class="mt-4 flex items-center gap-2 text-xs text-cyber-accent opacity-0 transition-all duration-300 group-hover:opacity-100">
+          <span>View Project</span>
+          <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</a>
+
+<style>
+  .project-card {
+    animation: slideUp 0.6s ease-out forwards;
+  }
+  
+  @keyframes slideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
