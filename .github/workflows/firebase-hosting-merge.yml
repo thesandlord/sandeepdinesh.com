@@ -18,3 +18,5 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPATIAL_AIRSHIP_87318 }}
           channelId: live
           projectId: spatial-airship-87318
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks

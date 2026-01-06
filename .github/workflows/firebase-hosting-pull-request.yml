@@ -19,3 +19,5 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPATIAL_AIRSHIP_87318 }}
           projectId: spatial-airship-87318
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
