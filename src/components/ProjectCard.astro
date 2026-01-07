@@ -17,7 +17,7 @@ const { title, description, image, link, delay = 0 } = Astro.props;
   class="project-card group block opacity-0"
   style={`animation-delay: ${delay}ms`}
 >
-  <div class="relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm transition-all duration-500 hover:border-cyber-accent/50 hover:shadow-lg hover:shadow-cyber-accent/10">
+  <div class="relative overflow-hidden rounded-xl border border-light-border dark:border-white/10 bg-gradient-to-br from-light-surface dark:from-white/5 to-transparent backdrop-blur-sm transition-all duration-500 hover:border-cyber-accent/50 hover:shadow-lg hover:shadow-cyber-accent/10">
     <div class="absolute inset-0 bg-gradient-to-r from-cyber-accent/5 to-cyber-purple/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
     
     <div class="flex flex-col md:flex-row">
@@ -30,14 +30,14 @@ const { title, description, image, link, delay = 0 } = Astro.props;
             loading="lazy"
           />
         </div>
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent to-cyber-dark/80 md:block hidden"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent to-light-surface/80 dark:to-cyber-dark/80 md:block hidden"></div>
       </div>
       
       <div class="flex flex-1 flex-col justify-center p-5 md:p-6">
-        <h4 class="font-display text-lg font-semibold text-white transition-colors duration-300 group-hover:text-cyber-accent md:text-xl">
+        <h4 class="font-display text-lg font-semibold text-light-text dark:text-white transition-colors duration-300 group-hover:text-cyber-accent md:text-xl">
           {title}
         </h4>
-        <p class="mt-2 text-sm leading-relaxed text-gray-400 line-clamp-3">
+        <p class="mt-2 text-sm leading-relaxed text-light-text-muted dark:text-gray-400 line-clamp-3">
           {description}
         </p>
         <div class="mt-4 flex items-center gap-2 text-xs text-cyber-accent opacity-0 transition-all duration-300 group-hover:opacity-100">
@@ -67,4 +67,3 @@ const { title, description, image, link, delay = 0 } = Astro.props;
     }
   }
 </style>
-

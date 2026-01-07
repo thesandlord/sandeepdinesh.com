@@ -7,7 +7,7 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,9 +17,50 @@ const { title } = Astro.props;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <title>{title}</title>
+    <!-- Theme detection - runs before page renders to prevent flash -->
+    <script is:inline>
+      (function() {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = stored || (prefersDark ? 'dark' : 'light');
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      })();
+    </script>
   </head>
-  <body class="bg-cyber-dark text-white min-h-screen font-body antialiased">
+  <body class="bg-light-bg dark:bg-cyber-dark text-light-text dark:text-white min-h-screen font-body antialiased transition-colors duration-300">
+    <!-- Theme Toggle Button -->
+    <button
+      id="theme-toggle"
+      aria-label="Toggle dark mode"
+      class="fixed top-4 right-4 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-light-border dark:border-white/20 bg-light-surface dark:bg-white/5 backdrop-blur-sm transition-all duration-300 hover:border-cyber-accent hover:bg-cyber-accent/10 hover:shadow-lg hover:shadow-cyber-accent/20"
+    >
+      <!-- Sun icon (shown in dark mode) -->
+      <svg class="h-5 w-5 hidden dark:block text-cyber-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+      <!-- Moon icon (shown in light mode) -->
+      <svg class="h-5 w-5 block dark:hidden text-cyber-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      </svg>
+    </button>
+
     <slot />
+
+    <script>
+      const toggle = document.getElementById('theme-toggle');
+      
+      toggle?.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      });
+
+      // Listen for system preference changes
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+          document.documentElement.classList.toggle('dark', e.matches);
+        }
+      });
+    </script>
   </body>
 </html>
 
@@ -32,22 +73,41 @@ const { title } = Astro.props;
     scroll-behavior: smooth;
   }
   
-  ::-webkit-scrollbar {
+  /* Dark mode scrollbar */
+  .dark::-webkit-scrollbar {
     width: 8px;
   }
   
-  ::-webkit-scrollbar-track {
+  .dark::-webkit-scrollbar-track {
     background: #0a0a0f;
   }
   
-  ::-webkit-scrollbar-thumb {
-    background: #00ffcc;
+  .dark::-webkit-scrollbar-thumb {
+    background: #00d4aa;
     border-radius: 4px;
   }
   
-  ::selection {
-    background: #00ffcc;
+  /* Light mode scrollbar */
+  html:not(.dark)::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  html:not(.dark)::-webkit-scrollbar-track {
+    background: #f4f4f5;
+  }
+  
+  html:not(.dark)::-webkit-scrollbar-thumb {
+    background: #00a882;
+    border-radius: 4px;
+  }
+  
+  .dark ::selection {
+    background: #00d4aa;
     color: #0a0a0f;
   }
+  
+  html:not(.dark) ::selection {
+    background: #9945ff;
+    color: #ffffff;
+  }
 </style>
-
